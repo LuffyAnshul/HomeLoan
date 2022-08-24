@@ -19,7 +19,7 @@ public class PropertyAndIncomeController {
 	PropertyAndIncomeService propertyAndIncomeService;
 	
 	@GetMapping("/{id}")
-	public PropertyAndIncome findUserById(@PathVariable int id) {
+	public PropertyAndIncome findUserById(@PathVariable Long id) {
 		System.out.println("INPUT +> " + id);
 		return propertyAndIncomeService.findCustomerIncomeById(id);
 	}
