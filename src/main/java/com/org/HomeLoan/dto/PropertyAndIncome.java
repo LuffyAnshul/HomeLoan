@@ -1,79 +1,61 @@
 package com.org.HomeLoan.dto;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-//import javax.persistence.SequenceGenerator;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 
-
-
-@SuppressWarnings("serial")
 @Entity
 @Table(name = "property")
-public class PropertyAndIncome implements Serializable {
+public class PropertyAndIncome {
 
 	@Id
-	@Column(name = "pi_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer piId;
+	@GeneratedValue
+	private Long piId;
 
 	@Column(name = "property_loc")
-	@NotNull(message = "Property Location is Mandatory")
-	@Pattern(regexp = "^(\\w+ ?)*$", message = " Location  should be only characters")
 	private String propertyLoc;
 
 	@Column(name = "property_name")
-	@NotNull(message = "Property Name is Mandatory")
-	@Pattern(regexp = "^(\\w+ ?)*$", message = " Property Name  should be only characters")
 	private String propertyName;
 
 	@Column(name = "estimated_amt")
-	@NotNull(message = "Estimated Amount is Mandatory!!")
 	private Long propertyEstimatedAmount;
 
 	@Column(name = "type_of_emp")
-	@NotNull(message = "Type of Employment is Mandatory")
 	private String typeOfEmployment;
 
 	@Column(name = "ret_age")
-	@NotNull(message = "Retirement age is Mandatory")
-	@Min(60) @Max(70)
 	private Integer retirementAge;
 
 	@Column(name = "org_type")
-	@NotNull(message = "Organization Type is Mandatory")
-	@Pattern(regexp = "^[a-zA-Z ]*$", message = "Organization Type  should be only characters")
 	private String orgType;
 
 	@Column(name = "employer_name")
-	@NotNull(message = "Employer Name is Mandatory!!")
-	@Pattern(regexp = "^(\\w+ ?)*$", message = "Employer Name should be only characters")
 	private String employerName;
 
 	@Column(name = "income")
-	@NotNull(message = "Income is Mandatory")
 	private Long income;
 	
-//	@OneToOne(targetEntity = Customer.class)
-//	private Customer customer;
+//	@OneToOne(mappedBy="loan_id")
+//    private Loan loan;
+	
+	@ManyToOne()
+	@JoinColumn(name="loan_id", nullable=false, insertable=false, updatable=false)
+    private Loan loan;
 	
 	public PropertyAndIncome() {
-
+		
 	}
 
-	public PropertyAndIncome(Integer piId, String propertyLoc, String propertyName, Long propertyEstimatedAmount,
+	public PropertyAndIncome(Long piId, String propertyLoc, String propertyName, Long propertyEstimatedAmount,
 			String typeOfEmployment, Integer retirementAge, String orgType, String employerName, Long income) {
 		super();
 		this.piId = piId;
@@ -87,11 +69,11 @@ public class PropertyAndIncome implements Serializable {
 		this.income = income;
 	}
 
-	public Integer getPiId() {
+	public Long getPiId() {
 		return piId;
 	}
 
-	public void setPiId(Integer piId) {
+	public void setPiId(Long piId) {
 		this.piId = piId;
 	}
 
@@ -159,12 +141,12 @@ public class PropertyAndIncome implements Serializable {
 		this.income = income;
 	}
 
-//	public Customer getCustomer() {
-//		return customer;
-//	}
-//
-//	public void setCustomer(Customer customer) {
-//		this.customer = customer;
-//	}
+	public Loan getLoan() {
+		return loan;
+	}
+
+	public void setLoan(Loan loan) {
+		this.loan = loan;
+	}
 
 }

@@ -14,8 +14,8 @@ public class PropertyAndIncomeDao {
 	@Autowired
 	PropertyAndIncomeRepo propertyAndIncomeRepo;
 
-	public PropertyAndIncome findCustomerIncomeById(int id) {
-		Optional<PropertyAndIncome> income = propertyAndIncomeRepo.findById(id);
+	public PropertyAndIncome findCustomerIncomeById(Long id) {
+		Optional<PropertyAndIncome> income = propertyAndIncomeRepo.findById(id.intValue());
 		if(income.isPresent()) {
 			System.out.println("CUSTOMER IS PRESENT");
 			return income.get();

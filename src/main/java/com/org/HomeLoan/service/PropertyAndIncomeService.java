@@ -12,7 +12,7 @@ public class PropertyAndIncomeService {
 	@Autowired
 	PropertyAndIncomeDao dao;
 	
-	public PropertyAndIncome findCustomerIncomeById(int id) {
+	public PropertyAndIncome findCustomerIncomeById(Long id) {
 		return dao.findCustomerIncomeById(id);
 	}
 	

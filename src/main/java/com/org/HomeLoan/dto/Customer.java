@@ -1,30 +1,24 @@
 package com.org.HomeLoan.dto;
 
-//import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
-import org.springframework.data.annotation.Transient;
 
 @Entity
 @Table(name = "customers")
 public class Customer {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUSTOMER_GEN")
 	private Integer customerId;
 
 	private String firstName;
@@ -49,20 +43,16 @@ public class Customer {
 
 	private String panNo;
 	
-//	@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
-//	@PrimaryKeyJoinColumn
-//	private PropertyAndIncome propertyAndIncome;
-
-	/* @OneToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL) */
-//	@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
-//	@PrimaryKeyJoinColumn
-//	private Loan loan;
-//	
-//	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-//	private List<Document> docs;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="customer_id",nullable=false)
+	private List<Loan> loans = new ArrayList<>() ;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="customer_id",nullable=false)
+	private List<Document> docs = new ArrayList<>();
 	
 	public Customer() {
-
+	
 	}
 
 	public Customer(Integer customerId, String firstName, String middleName, String lastName, String email, String password,
@@ -179,28 +169,20 @@ public class Customer {
 		this.panNo = panNo;
 	}
 
-//	public PropertyAndIncome getPropertyAndIncome() {
-//		return propertyAndIncome;
-//	}
-//
-//	public void setPropertyAndIncome(PropertyAndIncome propertyAndIncome) {
-//		this.propertyAndIncome = propertyAndIncome;
-//	}
-//
-//	public Loan getLoan() {
-//		return loan;
-//	}
-//
-//	public void setLoan(Loan loan) {
-//		this.loan = loan;
-//	}
-//
-//	public List<Document> getDocs() {
-//		return docs;
-//	}
-//
-//	public void setDocs(List<Document> docs) {
-//		this.docs = docs;
-//	}
+	public List<Document> getDocs() {
+		return docs;
+	}
+
+	public void setDocs(List<Document> docs) {
+		this.docs = docs;
+	}
+
+	public List<Loan> getLoans() {
+		return loans;
+	}
+
+	public void setLoans(List<Loan> loans) {
+		this.loans = loans;
+	}
 	
 }
