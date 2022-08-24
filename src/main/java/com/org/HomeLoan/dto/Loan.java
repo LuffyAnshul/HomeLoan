@@ -7,22 +7,22 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "loan")
 public class Loan {
+
 	@Id
 	@GeneratedValue
 	private Long loanId;
@@ -32,7 +32,7 @@ public class Loan {
 	private Double maxLoanGrant;
 
 	@Column(name = "interest_rate ")
-	private Double interestRate = 8.50;
+	private Double interestRate = 12.0;
 
 	@NotNull(message = "Tenure is mandatory.! ")
 	@Min(3) @Max(72)
@@ -45,15 +45,18 @@ public class Loan {
 
 	@ManyToOne()
 	@JoinColumn(name="customer_id", nullable=false, insertable=false, updatable=false)
-    private Customer customer;
-	
-//	@OneToOne(mappedBy="loan", cascade = CascadeType.ALL)
-//	@JoinColumn(name="loan_id",nullable=false, insertable = true, updatable = true)
-//	private PropertyAndIncome propertyAndIncome;
+	@JsonBackReference
+	private Customer customer;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="loan_id",nullable=false)
-	private List<PropertyAndIncome> propertyAndIncome = new ArrayList<>() ;
+	@JsonManagedReference
+	private List<PropertyAndIncome> propertyAndIncome = new ArrayList<>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="loan_id",nullable=false)
+	@JsonManagedReference
+	private List<LoanRepayment> loanRepayment = new ArrayList<>();
 	
 	public Loan() {
 		
@@ -63,7 +66,7 @@ public class Loan {
 		super();
 		this.loanId = loanId;
 		this.maxLoanGrant = maxLoanGrant;
-		this.interestRate = 8.50;
+		this.interestRate = 12.0;
 		this.tenure = tenure;
 		this.loanAmount = loanAmount;
 	}
@@ -130,14 +133,11 @@ public class Loan {
 		this.propertyAndIncome = propertyAndIncome;
 	}
 	
-	
+	public List<LoanRepayment> getLoanRepayment() {
+		return loanRepayment;
+	}
 
-//	public PropertyAndIncome getPropertyAndIncome() {
-//		return propertyAndIncome;
-//	}
-//
-//	public void setPropertyAndIncome(PropertyAndIncome propertyAndIncome) {
-//		this.propertyAndIncome = propertyAndIncome;
-//	}
-	
+	public void setLoanRepayment(List<LoanRepayment> loanRepayment) {
+		this.loanRepayment = loanRepayment;
+	}
 }

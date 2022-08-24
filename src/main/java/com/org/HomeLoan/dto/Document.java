@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name="document")
 public class Document {
@@ -16,14 +18,15 @@ public class Document {
 	private Integer docId;
 	
 	@Column(name="doc_Name")
-	private String  docName;
+	private String docName;
 	
 	@Column(name="doc_Path")
 	private String docPath;
 	
 	@ManyToOne()
 	@JoinColumn(name="customer_id", nullable=false, insertable=false, updatable=false)
-    private Customer customer;
+	@JsonBackReference
+	private Customer customer;
 	
 	@Override
 	public String toString() {

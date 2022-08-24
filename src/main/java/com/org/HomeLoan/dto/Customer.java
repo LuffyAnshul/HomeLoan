@@ -1,5 +1,6 @@
 package com.org.HomeLoan.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "customers")
-public class Customer {
+public class Customer implements Serializable {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUSTOMER_GEN")
@@ -45,10 +48,12 @@ public class Customer {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="customer_id",nullable=false)
+	@JsonManagedReference
 	private List<Loan> loans = new ArrayList<>() ;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="customer_id",nullable=false)
+	@JsonManagedReference
 	private List<Document> docs = new ArrayList<>();
 	
 	public Customer() {
