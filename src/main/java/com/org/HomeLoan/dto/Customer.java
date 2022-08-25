@@ -1,24 +1,26 @@
 package com.org.HomeLoan.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "customers")
-public class Customer {
+public class Customer implements Serializable {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUSTOMER_GEN")
+    @GeneratedValue
 	private Integer customerId;
 
 	private String firstName;
@@ -45,11 +47,18 @@ public class Customer {
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="customer_id",nullable=false)
+	@JsonManagedReference
 	private List<Loan> loans = new ArrayList<>() ;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="customer_id",nullable=false)
+	@JsonManagedReference
 	private List<Document> docs = new ArrayList<>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="customer_id",nullable=false)
+	@JsonManagedReference
+	private List<Login> login = new ArrayList<>();
 	
 	public Customer() {
 	
@@ -183,6 +192,14 @@ public class Customer {
 
 	public void setLoans(List<Loan> loans) {
 		this.loans = loans;
+	}
+
+	public List<Login> getLogin() {
+		return login;
+	}
+
+	public void setLogin(List<Login> login) {
+		this.login = login;
 	}
 	
 }

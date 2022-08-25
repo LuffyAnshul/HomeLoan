@@ -1,35 +1,32 @@
 package com.org.HomeLoan.dto;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 //import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "login")
 public class Login {
 	
 	@Id
-	@Column(name = "user_id")
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-//	@SequenceGenerator(name = "LOGIN_GEN", sequenceName = "login_id_seq")
+	@GeneratedValue
 	private Integer userId;
 	
-	@NotNull(message="Username required")
-	@Pattern(regexp="^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$",message="Invalid Email format")
-	private String username;
+	private String email;
 	
-	@NotNull(message="Password required")
 	private String password;
 	
-	@NotNull(message="Role required")
-	private String role;
-
+	@ManyToOne()
+	@JoinColumn(name="customer_id", nullable=false, insertable=false, updatable=false)
+	@JsonBackReference
+	private Customer customer;
+	
 	public Integer getUserId() {
 		return userId;
 	}
@@ -38,12 +35,12 @@ public class Login {
 		this.userId = userId;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -53,18 +50,18 @@ public class Login {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
 	
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
 	@Override
 	public String toString() {
-		return "Login [userId=" + userId + ", username=" + username + ", password=" + password + ", role=" + role + "]";
+		return "Login [userId=" + userId + ", email=" + email + ", password=" + password + "]";
 	}
 	
 }

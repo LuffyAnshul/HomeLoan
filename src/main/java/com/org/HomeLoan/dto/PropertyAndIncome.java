@@ -3,13 +3,12 @@ package com.org.HomeLoan.dto;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 @Entity
@@ -44,12 +43,10 @@ public class PropertyAndIncome {
 	@Column(name = "income")
 	private Long income;
 	
-//	@OneToOne(mappedBy="loan_id")
-//    private Loan loan;
-	
 	@ManyToOne()
 	@JoinColumn(name="loan_id", nullable=false, insertable=false, updatable=false)
-    private Loan loan;
+    @JsonBackReference
+	private Loan loan;
 	
 	public PropertyAndIncome() {
 		
