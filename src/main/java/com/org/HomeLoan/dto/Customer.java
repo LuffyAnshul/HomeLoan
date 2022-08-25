@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Customer implements Serializable {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUSTOMER_GEN")
+    @GeneratedValue
 	private Integer customerId;
 
 	private String firstName;

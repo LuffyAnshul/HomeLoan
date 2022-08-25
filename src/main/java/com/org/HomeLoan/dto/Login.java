@@ -16,20 +16,13 @@ public class Login {
 	
 	@Id
 	@Column(name = "user_id")
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-//	@SequenceGenerator(name = "LOGIN_GEN", sequenceName = "login_id_seq")
 	private Integer userId;
 	
-	@NotNull(message="Username required")
-	@Pattern(regexp="^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$",message="Invalid Email format")
-	private String username;
+	private String email;
 	
-	@NotNull(message="Password required")
 	private String password;
 	
-	@NotNull(message="Role required")
-	private String role;
-
+	
 	public Integer getUserId() {
 		return userId;
 	}
@@ -38,12 +31,12 @@ public class Login {
 		this.userId = userId;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -54,17 +47,9 @@ public class Login {
 		this.password = password;
 	}
 
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-	
 	@Override
 	public String toString() {
-		return "Login [userId=" + userId + ", username=" + username + ", password=" + password + ", role=" + role + "]";
+		return "Login [userId=" + userId + ", email=" + email + ", password=" + password + "]";
 	}
 	
 }

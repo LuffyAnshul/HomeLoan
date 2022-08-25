@@ -10,6 +10,7 @@ import com.org.HomeLoan.dao.LoanDao;
 import com.org.HomeLoan.dto.Loan;
 import com.org.HomeLoan.dto.LoanRepayment;
 import com.org.HomeLoan.dto.PropertyAndIncome;
+import com.org.HomeLoan.exception.LoanException;
 
 @Repository
 public class LoanService {
@@ -55,4 +56,18 @@ public class LoanService {
 		return repayments;
 	}
 
+	public List<LoanRepayment> updateLoanRepayment (Loan loan) {
+		List<LoanRepayment> repay = loan.getLoanRepayment();
+
+		repay.stream().filter(e -> e.getStatus() == false).findFirst().ifPresentOrElse(o -> o.setStatus(true), null);
+
+		return repay;
+	}
+	
+	public List<LoanRepayment> foreCloseLoanRepayment (List<LoanRepayment> repay) {
+		repay.stream().filter(e -> e.getStatus() == false).forEach(o -> o.setStatus(true));
+
+		return repay;
+	}
+	
 }

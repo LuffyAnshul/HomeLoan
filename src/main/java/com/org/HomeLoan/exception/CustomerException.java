@@ -9,7 +9,7 @@ public class CustomerException extends RuntimeException {
     public CustomerException(String msg)
     {
         super(msg);
-        this.message = msg;
+        this.message = msg ;
     }
 	
 }

@@ -24,6 +24,8 @@ public class LoanRepayment {
 	
 	private Double outstanding;
 	
+	private Boolean status = false;
+	
 	@ManyToOne()
 	@JoinColumn(name="loan_id", nullable=false, insertable=false, updatable=false)
     @JsonBackReference
@@ -77,6 +79,14 @@ public class LoanRepayment {
 
 	public void setLoan(Loan loan) {
 		this.loan = loan;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 	
 }
