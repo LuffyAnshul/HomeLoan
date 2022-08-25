@@ -38,22 +38,25 @@ public class LoanController {
 			
 			if(customerRef != null) {
 				
-				List<LoanRepayment> repayments = loanService.generateRepayment(loan);
-				loan.setLoanRepayment(repayments);
+				if(customerRef.getLogin().size() == 1) {
+					List<LoanRepayment> repayments = loanService.generateRepayment(loan);
+					loan.setLoanRepayment(repayments);
+					
+					List<Loan> loans= new ArrayList<>(customerRef.getLoans());
+					loans.add(loan);
+					customerRef.setLoans(loans);
+					
+					customerDao.saveCustomer(customerRef);
+					return "Loan Repayment Schedule Available";					
+				}
+				throw new LoanException("Customer Not Logged IN!!");
 				
-				List<Loan> loans= new ArrayList<>(customerRef.getLoans());
-				loans.add(loan);
-				customerRef.setLoans(loans);
-				
-				customerDao.saveCustomer(customerRef);
-				return "Loan Repayment Schedule Available";
-			} else {
-				throw new LoanException("Customer Does Not Exist!!");
-			}			
-		} else {
-			throw new LoanException("Customer Not Eligible!");
-		}
+			}
+			throw new LoanException("Customer Does Not Exist!!");			
 		
+		}
+		throw new LoanException("Customer Not Eligible!");
+				
 	}
 	
 	@PostMapping("/repayLoan/{id}")
@@ -62,25 +65,28 @@ public class LoanController {
 		List<Loan> loan = customerRef.getLoans();
 		
 		if(customerRef != null && loan.size() > 0) {
-			List<LoanRepayment> repayments = loanService.updateLoanRepayment(loan.get(loan.size() - 1));
-			if(repayments.stream().anyMatch(c -> c.getStatus() == false) == false) {
+			
+			if(customerRef.getLogin().size() == 1) {
+				List<LoanRepayment> repayments = loanService.updateLoanRepayment(loan.get(loan.size() - 1));
+				if(repayments.stream().anyMatch(c -> c.getStatus() == false) == false) {
+					
+					loan.get(0).setLoanRepayment(repayments);
+					customerRef.setLoans(loan);	
+					customerDao.saveCustomer(customerRef);
+					
+					return "Loan Repayment Complete";
+				}
 				
 				loan.get(0).setLoanRepayment(repayments);
-				customerRef.setLoans(loan);	
+				customerRef.setLoans(loan);
 				customerDao.saveCustomer(customerRef);
 				
-				return "Loan Repayment Complete";
+				return "Loan Repayment Updated";				
 			}
+			throw new LoanException("Customer Not Logged IN!!");
 			
-			loan.get(0).setLoanRepayment(repayments);
-			customerRef.setLoans(loan);
-			customerDao.saveCustomer(customerRef);
-			
-			return "Loan Repayment Updated";
-		} else {
-			throw new LoanException("Customer Does Not Exist!!");
 		}
-		
+		throw new LoanException("Customer Does Not Exist!!");
 	}
 
 	@PostMapping("/foreCloseLoan/{id}")
@@ -89,20 +95,25 @@ public class LoanController {
 		List<Loan> loan = customerRef.getLoans();
 		
 		if(customerRef != null && loan.size() > 0) {
-			List<LoanRepayment> repay = loan.get(loan.size() - 1).getLoanRepayment();
 			
-			if(repay.stream().filter(o -> o.getStatus() == true).count() >= 3) {
-				List<LoanRepayment> repayments = loanService.foreCloseLoanRepayment(repay);
-					
-				loan.get(loan.size() - 1).setLoanRepayment(repayments);
-				customerRef.setLoans(loan);	
-				customerDao.saveCustomer(customerRef);
+			if(customerRef.getLogin().size() == 1) {
+				List<LoanRepayment> repay = loan.get(loan.size() - 1).getLoanRepayment();
 				
-				return "Complete Fore Payment of Loan Complete";
-			}
+				if(repay.stream().filter(o -> o.getStatus() == true).count() >= 3) {
+					List<LoanRepayment> repayments = loanService.foreCloseLoanRepayment(repay);
+					
+					loan.get(loan.size() - 1).setLoanRepayment(repayments);
+					customerRef.setLoans(loan);	
+					customerDao.saveCustomer(customerRef);
+					
+					return "Complete Fore Payment of Loan Complete";
+				}
+				
+				
+				return "Fore Closure of Loan Not Possible Yet; Please Complete 3 months of minimum loan repayment";				
+			} 
+			throw new LoanException("Customer Not Logged IN");
 			
-			
-			return "Fore Closure of Loan Not Possible Yet; Please Complete 3 months of minimum loan repayment";
 		} else {
 			throw new LoanException("Customer Does Not Exist!!");
 		}

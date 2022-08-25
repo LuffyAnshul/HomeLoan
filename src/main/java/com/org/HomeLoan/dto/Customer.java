@@ -7,7 +7,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -55,6 +54,11 @@ public class Customer implements Serializable {
 	@JoinColumn(name="customer_id",nullable=false)
 	@JsonManagedReference
 	private List<Document> docs = new ArrayList<>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="customer_id",nullable=false)
+	@JsonManagedReference
+	private List<Login> login = new ArrayList<>();
 	
 	public Customer() {
 	
@@ -188,6 +192,14 @@ public class Customer implements Serializable {
 
 	public void setLoans(List<Loan> loans) {
 		this.loans = loans;
+	}
+
+	public List<Login> getLogin() {
+		return login;
+	}
+
+	public void setLogin(List<Login> login) {
+		this.login = login;
 	}
 	
 }

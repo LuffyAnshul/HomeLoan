@@ -43,8 +43,13 @@ public class CustomerDao {
 		Optional<Customer> search = Optional.ofNullable(findCustomerById(customer.getCustomerId()));
 		
 		if(search.isPresent()) {
-			customerRepo.save(customer);
-			return "Customer Updated successfully";
+			
+			if(customer.getLogin().size() == 1) {
+				customerRepo.save(customer);
+				return "Customer Updated successfully";				
+			}
+			
+			throw new CustomerException("Customer Not Logged In");
 		} else {
 			throw new CustomerException("Customer Doesn't exists!!");
 		}
